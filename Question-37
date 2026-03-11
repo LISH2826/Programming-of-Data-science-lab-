@@ -1,0 +1,53 @@
+# Install package if not installed
+install.packages("dplyr")
+
+# Load package
+library(dplyr)
+
+# Load starwars dataset
+data("starwars")
+
+# 1. Extract required columns
+sw <- starwars[, c("name","species","height","mass","homeworld","gender")]
+
+# 2. Remove rows where species is NA
+sw <- sw[!is.na(sw$species), ]
+
+# 3. Filter species with more than 2 characters
+species_count <- table(sw$species)
+valid_species <- names(species_count[species_count > 2])
+sw_filtered <- sw[sw$species %in% valid_species, ]
+
+# 4. Convert height to meters
+sw_filtered$height_m <- sw_filtered$height / 100
+
+# 5. Categorize mass into weight categories
+sw_filtered$weight_category <- ifelse(sw_filtered$mass < 60, "Light",
+                                      ifelse(sw_filtered$mass < 90, "Medium", "Heavy"))
+
+# 6. Average height for each species and gender
+avg_height_species_gender <- aggregate(
+  height_m ~ species + gender,
+  data = sw_filtered,
+  FUN = mean,
+  na.rm = TRUE
+)
+
+# 7. Average height for each species
+avg_height_species <- aggregate(
+  height_m ~ species,
+  data = sw_filtered,
+  FUN = mean,
+  na.rm = TRUE
+)
+
+# 8. Identify top 3 species with highest average height
+top3_species <- avg_height_species[order(-avg_height_species$height_m), ][1:3, ]
+
+# 9. Display results
+print("Average Height by Species and Gender")
+print(avg_height_species_gender)
+
+print("Top 3 Species with Highest Average Height")
+print(top3_species)
+
