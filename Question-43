@@ -1,0 +1,25 @@
+install.packages("jsonlite")
+
+library(jsonlite)
+
+setwd("C:/Users/PC/Downloads")
+
+inventory_data <- fromJSON("inventory.json")
+
+new_product <- data.frame(
+  product_id = 104,
+  name = "Monitor",
+  category = "Electronics",
+  price = 12000,
+  stock = 20
+)
+
+updated_inventory <- rbind(inventory_data, new_product)
+
+write(toJSON(updated_inventory, pretty = TRUE), "updated_inventory.json")
+
+verified_data <- fromJSON("updated_inventory.json")
+
+print(verified_data)
+
+
