@@ -1,0 +1,19 @@
+# Department-wise averages
+dept_test_avg <- aggregate(
+  patients[, test_cols],
+  by = list(Department = patients$Department),
+  FUN = function(x) mean(x, na.rm = TRUE)
+)
+
+# Overall average
+dept_test_avg$Overall_Average <- rowMeans(dept_test_avg[, test_cols], na.rm = TRUE)
+
+# Sort by Overall_Average (descending)
+dept_test_avg <- dept_test_avg[order(-dept_test_avg$Overall_Average), ]
+
+# Round only numeric columns
+dept_test_avg[, test_cols] <- round(dept_test_avg[, test_cols], 2)
+dept_test_avg$Overall_Average <- round(dept_test_avg$Overall_Average, 2)
+
+# Print result
+print(dept_test_avg)
