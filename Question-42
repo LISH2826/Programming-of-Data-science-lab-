@@ -1,0 +1,40 @@
+
+
+# Install packages (run once)
+install.packages("DBI")
+install.packages("dplyr")
+install.packages("RSQLite")
+
+# Load libraries
+library(DBI)
+library(dplyr)
+library(RSQLite)
+
+con <- dbConnect(RSQLite::SQLite(), "songs.db")
+
+songs_data <- data.frame(
+  song_id = 1:6,
+  title = c("Bohemian Rhapsody",
+            "We Will Rock You",
+            "Don't Stop Me Now",
+            "Another One Bites the Dust",
+            "Shape of You",
+            "Perfect"),
+  artist_id = c(11,11,11,11,5,5)
+)
+
+dbWriteTable(con, "songs", songs_data, overwrite = TRUE)
+
+songs_table <- tbl(con, "songs")
+
+queen_songs <- songs_table %>%
+  filter(artist_id == 11) %>%
+  select(title)
+
+show_query(queen_songs)
+
+result <- collect(queen_songs)
+
+print(result)
+
+dbDisconnect(con)
