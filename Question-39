@@ -1,0 +1,61 @@
+# Step 1: Install and Load Required Library
+# install.packages("dplyr")   # Run once if not installed
+library(dplyr)
+
+# Step 2: Create Customers Dataset
+CustomerName <- c("John Doe","Jane Smith","Robert Brown","Emily Davis","Michael Green")
+
+Email <- c("john.doe@example.com",
+           "jane.smith@example.com",
+           "robert.brown@example.com",
+           "emily.davis@example.com",
+           "michael.green@example.com")
+
+customers <- data.frame(CustomerName, Email, stringsAsFactors = FALSE)
+
+# View dataset
+print(customers)
+
+
+# Step 3: Create Purchases Dataset
+CustomerName2 <- c("John Doe","Jane Smith","Robert Brown","Sarah Johnson","Emily Davis")
+
+PurchaseAmount <- c(150,200,120,180,220)
+
+Date <- c("01-01-2023","02-01-2023","03-01-2023","04-01-2023","05-01-2023")
+
+purchases <- data.frame(CustomerName = CustomerName2,
+                        PurchaseAmount,
+                        Date,
+                        stringsAsFactors = FALSE)
+
+# View dataset
+print(purchases)
+
+
+# Step 4: Perform Join Operations
+
+# Left Join
+left_result <- left_join(customers, purchases, by = "CustomerName")
+cat("\nLEFT JOIN RESULT\n")
+print(left_result)
+
+
+# Right Join
+right_result <- right_join(customers, purchases, by = "CustomerName")
+cat("\nRIGHT JOIN RESULT\n")
+print(right_result)
+
+
+# Inner Join
+inner_result <- inner_join(customers, purchases, by = "CustomerName")
+cat("\nINNER JOIN RESULT\n")
+print(inner_result)
+
+
+# Full Outer Join
+full_result <- full_join(customers, purchases, by = "CustomerName")
+cat("\nFULL OUTER JOIN RESULT\n")
+print(full_result)
+
+
